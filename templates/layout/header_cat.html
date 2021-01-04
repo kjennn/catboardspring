@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <!-- [ Header ] start -->
+    <header class="navbar navbar-header navbar-header-fixed" th:fragment="headerFragment">
+      <nav class="navbar navbar-expand-lg navbar-light">
+              <a class="blog-header-logo text-dark" href="/admin/catboard">
+                CatBoard
+              </a>
+              <div class="collapse navbar-collapse float-right" id="navbarNavDropdown" style = "padding:15px;">
+                <ul class="navbar-nav ">
+
+                  <li class="nav-item ">
+                    <a class="nav-link" href="/admin/cat_info"> 고양이 지식</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/admin/cat_adopt"> 고양이 입양</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/admin/cat_qa">고양이 Q&A</a>
+                  </li>
+                </ul>
+              </div>
+
+          <button type="button" class="btn btn-outline-dark folat_right" data-toggle="modal" data-target="#exampleModal">마이페이지
+        </nav>
+            <!--  마이페이지 모달  -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">마이페이지</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                           <div th:if="${session.id != null}">
+                            <a href="/admin/catboard">로그아웃 하러 가기</a><br>
+                          </div>
+                          <div th:if="${session.id == null}">
+                          <a href="/admin/catboard">로그인</a>을 해주세요<br>
+                          </div>
+
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </header>
+</html>

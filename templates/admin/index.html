@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head th:replace="layout/config_cat :: configFragment"></head>
+
+<body>
+    <!--  메인 화면 로고 및 로그인 바 -->
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand text-dark" href="/admin/catboard"
+            style="padding-left: 80px;"><h2>CatBoard : 집사의 아지트</h2></a>
+        <div class="float-right" style="padding-right: 20px;">
+
+             <!--  로그인 전 -->
+            <div th:if="${session.id == null} ">
+            <button type="button" class="btn btn-dark" id="log"
+                data-toggle="modal" data-target="#staticBackdrop"
+                onclick="logout();" )>로그인</button>
+            <button type="button" class="btn btn-dark" id="log"
+                data-toggle="modal" data-target="#staticBackdrop2"
+                style="margin-right: 50px;" )>회원가입</button>
+             </div>
+             <!--  로그인 후 -->
+                <div th:if="${session.id  != null} ">
+                     <p th:text="${id}">님 어서오세요</p>
+              <button type="button" class="btn btn-dark" id="log"
+                data-toggle="modal" data-target="#staticBackdrop"
+                style="margin-right: 50px;" )>로그아웃</button>
+                 </div>
+    </nav>
+    <!--  모달 창 생성   -->
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static"
+        data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                     <div th:if="${session.id == null}">
+                        <form th:action="@{/admin/login}" th:object="${member}" method="post" >
+                            <input type="text" class="form-control is vaild"
+                                placeholder="아이디" name="id" id="id"
+                                aria-describedby="validationServer03Feedback" required><br>
+                            <input type="password" class="form-control is vaild"
+                                placeholder="비밀번호" name="passwd" id="passwd"
+                                aria-describedby="validationServer03Feedback" required><br>
+                            <div class="modal-footer">
+                                <input type="submit" class="btn btn-light" value="로그인">
+                                <button type="button" class="btn btn-secondary"
+                                    data-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                        </div>
+                        <div th:if="${session.id != null}" >
+                        <form th:action="@{/admin/logout}" th:object="${member}" method="post">
+                                <button type="submit" class="btn btn-secondary"
+                                    data-dismiss="modal">로그아웃</button>
+                         </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 회원가입 모달 -->
+    <div class="modal fade" id="staticBackdrop2" data-backdrop="static"
+        data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel2" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel2">회원가입</h5>
+                    <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <!-- 회원가입 아이디, 비밀번호 입력 폼 -->
+                        <form th:action="@{/admin/join}" th:object="${member}" method="post">
+                            <input type="text" class="form-control is vaild"
+                                placeholder="아이디" name="id" id="id"
+                                aria-describedby="validationServer03Feedback" required><br>
+                            <input type="password" class="form-control is vaild"
+                                onchange="join(this)" placeholder="비밀번호" name="passwd"
+                                id="passwd" aria-describedby="validationServer03Feedback" required><br>
+                            <div class="modal-footer">
+                                <input type="submit" class="btn btn-light" id="sub" value="회원가입">
+                                <script>
+                                    function join(obj) {
+                                        document.getElementById("sub").onclick = function() {
+                                            alert("회원가입완료!");
+                                            location.href = "index.jsp";
+                                        }
+                                    }
+                                </script>
+                                <button type="button" class="btn btn-secondary"
+                                    data-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid2">
+        <div class="card" style="padding: 20px; box-shadow: 3px 3px 7px gray;">
+            <div class="hovereffect">
+                <img class="img-responsive rounded" src="/assets/img/CatBoard_info.jpg">
+                <div class="overlay">
+                    <h2>고양이 지식</h2>
+                    <a class="info"  href="/admin/cat_info" >좋은 집사가 되려면?</a>
+                </div>
+            </div>
+        </div>
+        <!-- 로그인을 해야 읽을 수 있는 카테고리 -->
+        <div class="card" style="padding: 20px; box-shadow: 3px 3px 7px gray;">
+            <div class="hovereffect">
+                <img class="img-responsive rounded" src="/assets/img/CatBoard_adopt.jpg">
+                <div class="overlay">
+                    <h2>고양이 입양</h2>
+                     <a class="info" href="/admin/cat_adopt"> 사지말고 입양하세요</a>
+                </div>
+            </div>
+        </div>
+        <div class="card" style="padding: 20px; box-shadow: 3px 3px 7px gray;">
+            <div class="hovereffect">
+                <img class="img-responsive rounded" src="/assets/img/CatBoard_qa.jpg">
+                <div class="overlay">
+                    <h2>고양이 Q&A</h2>
+                    <a class="info" href="/admin/cat_qa">무엇이든 물어보세요!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 모달을 위한 스크립트
+        $('#myModal').on('shown.bs.modal', function() {
+            $('#myInput').trigger('focus')
+        })
+    </script>
+
+</body>
+</html>

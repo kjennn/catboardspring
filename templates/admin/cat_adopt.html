@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="layout/config_cat :: configFragment">
+<link rel="stylesheet" href="/assets/css/style.css">
+      <link rel="stylesheet" href="/assets/css/hover.css">
+</head>
+<!-- 네비게이션바 헤더 -->
+<div th:replace="layout/header_cat :: headerFragment"></div>
+<body>
+    <div class="container">
+        <!-- 이미지 슬라이드 -->
+        <div>
+            <a role="button" class="btn btn-light" data-toggle="collapse"
+                href="#collapseExample" aria-expanded="true"
+                aria-controls="collapseExample"
+                style="background-color: transparent;">▼</a>
+        </div>
+        <div id="carouselExampleInterval" class="carousel slide"
+            data-ride="carousel">
+            <div class="collapse" id="collapseExample">
+                <div class="panel-body">
+                    <div class="carousel-inner" id="imgs">
+                        <div class="carousel-item active" data-interval="3000">
+                            <img src="/assets/img/cat2.jpg" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item" data-interval="3000">
+                            <img src="/assets/img/cat3.jpg" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item" data-interval="3000">
+                            <img src="/assets/img/cat4.jpg" class="d-block w-100" alt="...">
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleInterval"
+                        role="button" data-slide="prev"> <span
+                        class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+                        class="sr-only">Previous</span>
+                    </a> <a class="carousel-control-next" href="#carouselExampleInterval"
+                        role="button" data-slide="next"> <span
+                        class="carousel-control-next-icon" aria-hidden="true"></span> <span
+                        class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- 고양이 지식  -->
+        <br> <a class="blog-header-logo text-dark" style="margin: 10px;">
+            고양이 입양</a><br>
+
+        <!--  글 목록 -->
+            <table class="table table-hover">
+                <thead class="thead">
+                    <tr>
+                        <th scope="cols">No.</th>
+                        <th scope="cols">제목</th>
+                        <th scope="cols">작성자</th>
+                        <th scope="cols">작성날짜</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="board : ${catadoptlist}">
+                        <td th:text="${board.boardNum}"></td>
+                        <!-- 글 번호 파라미터로 받고 제목 보이기 -->
+                        <th scope="row" style="cursor: pointer;"><a
+                            th:href="@{/admin/article?num={no} (no=${board.boardNum})}"
+                            style="text-decoration: none; color: black;" th:text="${board.title}"></a></th>
+                        <!-- 작성자 -->
+                        <td th:text="${board.id}"></td>
+                        <!-- 작성 시간 -->
+                        <td th:text="${board.createTime}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--  로그인 후 -->
+        <div th:if="${session.id != null}">
+         <button type="button" class="btn btn-outline-dark  float-right"
+            data-toggle="modal" data-target="#exampleModal2"
+            style="margin-right: 25px;">작성하기</button>
+        <br> <br> <br>
+        </div>
+
+        <div th:if="${session.id == null}">
+          <button type="button" class="btn btn-outline-dark  float-right"
+            disabled="disabled" style="margin-right: 25px;">작성하기</button>
+        <br> <br> <br>
+        </div>
+        <!--  글 작성 모달 -->
+        <div class="modal fade" id="exampleModal2" tabindex="-1"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">게시글 작성</h5>
+                        <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <!-- 글 입력 폼 -->
+                                <form th:action="@{/admin/insert}" th:object="${board}" method="post">
+                                    <table class="table table-striped"
+                                        style="text-align: center; border: 1px solid #dddddd">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2"
+                                                    style="background-color: #eeeeee; text-align: center; width: 400px;">작성하기</th>
+                                            </tr>
+                                            <tr>
+                                                <!--  셀렉트 상자 -->
+                                                <select class="custom-select" id="inputGroupSelect02"
+                                                    name="select" required>
+                                                    <option value="">카테고리 선택</option>
+                                                    <option value="catinfo">고양이 지식</option>
+                                                    <option value="catadopt">고양이 입양</option>
+                                                    <option value="catqa">고양이 질문</option>
+                                                </select>
+                                                <input type="hidden" name="id" value="지은">
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><input type="text" class="form-control is vaild"
+                                                    placeholder="글 제목" name="bbsTitle" maxlength="50"
+                                                    id="bbsTitle"
+                                                    aria-describedby="validationServer03Feedback" required /></td>
+                                            </tr>
+                                            <tr>
+                                                <td><textarea class="form-control is vaild"
+                                                        placeholder="글 내용" name="bbsContent" maxlength="2048"
+                                                        style="height: 350px; width: 420px;"
+                                                        id="bbsContent"
+                                                        aria-describedby="validationServer03Feedback" required></textarea></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button type="submit" class="btn btn-outline-dark float-right">글쓰기</button>
+                                    <button type="button" class="btn btn-secondary float-right"
+                                        style="margin-right: 10px;" data-dismiss="modal">닫기</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 글 수정 모달 끝 -->
+    </div>
+
+</body>
+
+</html>
