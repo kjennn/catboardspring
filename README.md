@@ -4,6 +4,8 @@
 
 springboot, gradle, mysql
 
+thymeleaf 사용
+
 
 - controller 메소드 명과 service 메소드 명이 일치해야함  -> nullpointer 오류 
 - 글 CRUD됨, 댓글은 CR됨
