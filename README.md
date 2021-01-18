@@ -10,6 +10,7 @@ springboot, gradle, mysql, mybatis, mariadb , thymeleaf
 #### 적용내용
 - controller 메소드 명과 service 메소드 명이 일치해야함  -> nullpointer 오류 
 - 글 CRUD, 댓글 CRD
+- 회원가입만 가능
 - 로그인 -> 세션 부여, 시큐리티 사용 x
 
 * * *
