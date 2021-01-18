@@ -9,7 +9,7 @@
 <!-- 네비게이션바 헤더 -->
 <div th:replace="layout/header_cat :: headerFragment"></div>
 <body>
-    <div class="container">
+    <div class="container" id="recruitGrid">
         <!-- 이미지 슬라이드 -->
         <div>
             <a role="button" class="btn btn-light" data-toggle="collapse"
@@ -68,89 +68,11 @@
                         <!-- 작성자 -->
                         <td th:text="${board.id}"></td>
                         <!-- 작성 시간 -->
-                        <td th:text="${board.createTime}"></td>
+                        <td th:text="${#dates.format(board.createTime,'yyyy-MM-dd')}"></td>
                     </tr>
                 </tbody>
             </table>
-            <!--  로그인 후 -->
-        <div th:if="${session.id != null}">
-         <button type="button" class="btn btn-outline-dark  float-right"
-            data-toggle="modal" data-target="#exampleModal2"
-            style="margin-right: 25px;">작성하기</button>
-        <br> <br> <br>
-        </div>
-
-        <div th:if="${session.id == null}">
-          <button type="button" class="btn btn-outline-dark  float-right"
-            disabled="disabled" style="margin-right: 25px;">작성하기</button>
-        <br> <br> <br>
-        </div>
-        <!--  글 작성 모달 -->
-        <div class="modal fade" id="exampleModal2" tabindex="-1"
-            aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">게시글 작성</h5>
-                        <button type="button" class="close" data-dismiss="modal"
-                            aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container">
-                            <div class="row">
-                                <!-- 글 입력 폼 -->
-                                <form th:action="@{/admin/insert}" th:object="${board}" method="post">
-                                    <table class="table table-striped"
-                                        style="text-align: center; border: 1px solid #dddddd">
-                                        <thead>
-                                            <tr>
-                                                <th colspan="2"
-                                                    style="background-color: #eeeeee; text-align: center; width: 400px;">작성하기</th>
-                                            </tr>
-                                            <tr>
-                                                <!--  셀렉트 상자 -->
-                                                <select class="custom-select" id="inputGroupSelect02"
-                                                    name="select" required>
-                                                    <option value="">카테고리 선택</option>
-                                                    <option value="catinfo">고양이 지식</option>
-                                                    <option value="catadopt">고양이 입양</option>
-                                                    <option value="catqa">고양이 질문</option>
-                                                </select>
-                                                <input type="hidden" name="id" value="지은">
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><input type="text" class="form-control is vaild"
-                                                    placeholder="글 제목" name="bbsTitle" maxlength="50"
-                                                    id="bbsTitle"
-                                                    aria-describedby="validationServer03Feedback" required /></td>
-                                            </tr>
-                                            <tr>
-                                                <td><textarea class="form-control is vaild"
-                                                        placeholder="글 내용" name="bbsContent" maxlength="2048"
-                                                        style="height: 350px; width: 420px;"
-                                                        id="bbsContent"
-                                                        aria-describedby="validationServer03Feedback" required></textarea></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <button type="submit" class="btn btn-outline-dark float-right">글쓰기</button>
-                                    <button type="button" class="btn btn-secondary float-right"
-                                        style="margin-right: 10px;" data-dismiss="modal">닫기</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 글 수정 모달 끝 -->
-    </div>
-
+      <!--  작성버튼 footer -->
+      <div th:replace="layout/footer_cat :: footerFragment"></div>
 </body>
-
 </html>

@@ -21,7 +21,7 @@
                         <td id="title" scope="row" style="padding-left: 25px;"><h3
                                 style="margin: 0;" th:text="${article.title}"></h3></td>
                         <td id="name"><p style="margin: 0;" th:text="${article.id}"></p></td>
-                        <td id="date"><p style="margin: 0;" th:text="${article.createTime}"></p></td>
+                        <td id="date"><p style="margin: 0;" th:text="${#dates.format(article.createTime,'yyyy-MM-dd HH:mm')}"></p></td>
                     </tr>
                 </thead>
             </table>
@@ -53,21 +53,19 @@
             </div>
 
         </div>
-        <!--  작성자만 수정. 삭제 가능 -->
-<!--         <c:set var="id" value='<%=session.getAttribute("id")%>' /> -->
-        <!-- 변수 id = 세션값 -->
-<!--         <c:if test="${id eq board.id }"> -->
-            <!-- 변수 id가 board.id와 같으면 -->
-            <!--  삭제 버튼 -->
-            <form th:action="@{/admin/delete}" th:object="${board}" method="post">
+        <div th:if="${session.id} == ${article.id}" >
+            <form th:action="@{/admin/delete}" th:object="${board}" method="post"
+            onsubmit="return confirm('정말 삭제 하시겠습니까?');">
                 <input type="hidden" name="boardNum" th:value="${article.boardNum}" />
                 <input type="hidden" name="board_id" value="${board.board_id }" />
                 <input type="submit" class="btn btn-outline-dark  float-right"
                     style="margin-bottom: 20px;" value="삭제" />
             </form>
-            <!-- 수정 버튼 -->
             <input type="button" class="btn btn-outline-dark   float-right"
                 data-toggle="modal" data-target="#exampleModal2" value="수정" />
+            </div>
+            <!-- 수정 버튼 -->
+
             <div class="modal fade" id="exampleModal2" tabindex="-1"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -80,7 +78,8 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form th:action="@{/admin/update}" th:object="${board}"  method="post">
+                            <form th:action="@{/admin/update}" th:object="${board}"  method="post"
+                            onsubmit="return confirm('이대로 수정하시겠습니까?');">
                                 <input type="hidden" name="boardNum" th:value ="${article.boardNum}"/>
                                 <div class="container">
                                     <div class="row">
@@ -134,67 +133,42 @@
                     </div>
                 </div>
             </div>
-        </c:if>
-        <!-- id 와 board.id가 같지 않으면 버튼 없음 -->
-        <c:if test="${id ne board.id }"></c:if>
         <!-- 댓글 -->
-        <div class="group" style="margin-bottom: 25px;">
-<!--             <% -->
-<!--                 if (session.isNew() || session.getAttribute("id") == null) { -->
-<!--             %> -->
-<!--             <table class="table"> -->
-<!--                 <tbody id="listBody"> -->
-<!--                     <tr style="border: 1px solid #e7e7e7; padding: 10px"> -->
-<!--                         <td id="cmt" scope="row" style="padding-left: 25px; color: red;"> -->
-<!--                             댓글 읽기 및 작성은 로그인을 해야 합니다!</td> -->
-<!--                     </tr> -->
-<!--                 </tbody> -->
-<!--             </table> -->
-<!--             <% -->
-<!--                 } else { -->
-<!--             %> -->
-<!--             <% -->
+        <div  class="group" style="margin-bottom: 25px;">
+           <form th:action="@{/admin/deletecomment}" th:object="${comment}"  method="post"  th:each="comment : ${comment}" >
+            <input type="hidden" name="CommentNum" th:value="${comment.commentNum}" />
+            <input type="hidden" name="BoardNum" th:value="${article.boardNum}" />
             <table class="table">
                 <tbody id="listBody">
-                    <tr style="border: 1px solid #e7e7e7; padding: 10px" th:each="comment : ${comment}">
+                    <tr style="border: 1px solid #e7e7e7; padding: 10px" >
                         <td id="cmt" scope="row" style="width: 750px; padding-left: 25px;"
                         th:text="${comment.comments}"></td>
                         <td id="id" style="width: 100px;" th:text="${comment.id}"></td>
-                        <td id="date" th:text="${comment.createTime}"></td>
+                        <td id="date" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm')}"></td>
+                        <td  th:if="${session.id} == ${comment.id}" ><button type=submit class="btn btn-outline-dark">삭제</button></td>
                     </tr>
                 </tbody>
             </table>
-<!--             <% -->
-<!--                 } -->
-<!--             } else { -->
-<!--             %> -->
-<!--             <table class="table"> -->
-<!--                 <tbody id="listBody"> -->
-<!--                     <tr style="border: 1px solid #e7e7e7; padding: 10px"> -->
-<!--                         <td id="cmt" scope="row" style="padding-left: 25px; color: blue;"> -->
-<!--                             첫 댓글을 작성해보세요!</td> -->
-<!--                     </tr> -->
-<!--                 </tbody> -->
-<!--             </table> -->
-<!--             <% -->
-<!--                 } -->
-<!--             %> -->
-            <!-- 댓글 작성 -->
+           </form>
             <div class="editor__container">
-                <form action="CommentInsert.do" method="post" class="editor__form"
+                <form th:action="@{/admin/insertcomment}" th:object="${comment}"  method="post" class="editor__form"
                     id="editor-form">
-                    <div class="input-group">
+                    <div th:if="${session.id} != null" class="input-group">
                         <input type="text" class="form-control" id="editor-title-input"
-                            name="cmt" placeholder="댓글" style="width: 400px;"> <input
-                            type="hidden" name="id">
-                        <input type="hidden" name="num" value=${board.board_num }>
-                        <button type="submit" class="btn btn-dark" id="editor-submit-btn" >댓글</button>
+                            name="cmt" placeholder="댓글" style="width: 400px;">
+                        <input type="hidden" name="id" th:value=${session.id}>
+                        <input type="hidden" name="boardNum" th:value="${article.boardNum}" />
+                        <button type="submit" class="btn btn-dark" id="editor-submit-btn"  >댓글</button>
                     </div>
+                    <div th:if="${session.id} == null" class="input-group">
+                        <input type="text" class="form-control" id="editor-title-input"
+                            name="cmt" placeholder="로그인 후 작성해주세요!" style="width: 400px;" disabled="disabled">
+                        <button type="submit" class="btn btn-dark" id="editor-submit-btn" disabled="disabled">댓글</button>
+                    </div>
+
                 </form>
             </div>
-<!--             <% -->
-<!--                 } -->
-<!--             %> -->
+
         </div>
     </div>
 </body>

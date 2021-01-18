@@ -9,7 +9,7 @@
     <!--  메인 화면 로고 및 로그인 바 -->
     <nav class="navbar navbar-light bg-light">
         <a class="navbar-brand text-dark" href="/admin/catboard"
-            style="padding-left: 80px;"><h2>CatBoard : 집사의 아지트</h2></a>
+            style="padding-left: 80px;"><h2>CatBoard</h2></a>
         <div class="float-right" style="padding-right: 20px;">
 
              <!--  로그인 전 -->
@@ -23,20 +23,32 @@
              </div>
              <!--  로그인 후 -->
                 <div th:if="${session.id  != null} ">
-                     <p th:text="${id}">님 어서오세요</p>
-              <button type="button" class="btn btn-dark" id="log"
-                data-toggle="modal" data-target="#staticBackdrop"
-                style="margin-right: 50px;" )>로그아웃</button>
+                     <form th:action="@{/admin/logout}" method="post"
+                     onsubmit="return confirm('정말 로그아웃 하시겠습니까?');">
+                     <span th:text="${session.id}+'님 어서오세요 '"></span>
+                     <button type="submit" class="btn btn-dark" id="log"
+                       style="margin-right: 50px;">로그아웃</button>
+                     </form>
                  </div>
     </nav>
     <!--  모달 창 생성   -->
+    <script th:inline="javascript">
+       function alert_error(){
+    	   if(/*[[${error}]]*/ != null  ){
+    		   alert(/*[[${error}]]*/);
+    	   }else if(/*[[${error}]]*/ != null && /*[[${login}]]*/ != null){
+    		   alert(/*[[${login}]]*/);
+    	   }
+
+       }
+    </script>
     <div class="modal fade" id="staticBackdrop" data-backdrop="static"
         data-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel"></h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">로그인</h5>
                     <button type="button" class="close" data-dismiss="modal"
                         aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -53,19 +65,12 @@
                                 placeholder="비밀번호" name="passwd" id="passwd"
                                 aria-describedby="validationServer03Feedback" required><br>
                             <div class="modal-footer">
-                                <input type="submit" class="btn btn-light" value="로그인">
+                                <input type="submit" class="btn btn-light" value="로그인" onclick="alert_error()">
                                 <button type="button" class="btn btn-secondary"
                                     data-dismiss="modal">Close</button>
                             </div>
                         </form>
                         </div>
-                        <div th:if="${session.id != null}" >
-                        <form th:action="@{/admin/logout}" th:object="${member}" method="post">
-                                <button type="submit" class="btn btn-secondary"
-                                    data-dismiss="modal">로그아웃</button>
-                         </form>
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -92,17 +97,14 @@
                                 placeholder="아이디" name="id" id="id"
                                 aria-describedby="validationServer03Feedback" required><br>
                             <input type="password" class="form-control is vaild"
-                                onchange="join(this)" placeholder="비밀번호" name="passwd"
+                               placeholder="비밀번호" name="passwd"
                                 id="passwd" aria-describedby="validationServer03Feedback" required><br>
                             <div class="modal-footer">
                                 <input type="submit" class="btn btn-light" id="sub" value="회원가입">
                                 <script>
-                                    function join(obj) {
                                         document.getElementById("sub").onclick = function() {
                                             alert("회원가입완료!");
-                                            location.href = "index.jsp";
                                         }
-                                    }
                                 </script>
                                 <button type="button" class="btn btn-secondary"
                                     data-dismiss="modal">Close</button>

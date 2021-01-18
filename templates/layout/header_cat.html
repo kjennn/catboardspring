@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <!-- [ Header ] start -->
-    <header class="navbar navbar-header navbar-header-fixed" th:fragment="headerFragment">
+    <header class="navbar navbar-header navbar-header-fixed" style="margin-left:12%" th:fragment="headerFragment">
       <nav class="navbar navbar-expand-lg navbar-light">
               <a class="blog-header-logo text-dark" href="/admin/catboard">
                 CatBoard
@@ -34,9 +34,14 @@
                             </button>
                           </div>
                           <div class="modal-body">
-                           <div th:if="${session.id != null}">
-                            <a href="/admin/catboard">로그아웃 하러 가기</a><br>
-                          </div>
+                         <span th:text="${session.id}+'님의 마이페이지 입니다.'"></span>
+                           <div th:if="${session.id != null} ">
+                               <form th:action="@{/admin/logout}" method="post"
+                               onsubmit="return confirm('정말 로그아웃 하시겠습니까?');">
+                               <button type="submit" class="btn btn-outline-dark" id="log"
+                                 style="margin-right: 50px;">로그아웃</button>
+                               </form>
+                           </div>
                           <div th:if="${session.id == null}">
                           <a href="/admin/catboard">로그인</a>을 해주세요<br>
                           </div>
@@ -48,5 +53,5 @@
                         </div>
                       </div>
                     </div>
-                </header>
+     </header>
 </html>
