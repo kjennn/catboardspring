@@ -4,9 +4,7 @@
 
 * * *
 
-springboot, gradle, mysql
-
-thymeleaf 사용
+springboot, gradle, mysql, mybatis, mariadb , thymeleaf
 
 * * *
 #### 적용내용
