@@ -1,4 +1,4 @@
-package com.gsitm.career.web;
+
 
 import java.util.List;
 
@@ -16,11 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.gsitm.career.dto.BoardVO;
-import com.gsitm.career.dto.CommentVO;
-import com.gsitm.career.dto.MemberVO;
-import com.gsitm.career.service.BoardService;
-import com.gsitm.career.service.CatBoardService;
+
 
 import lombok.extern.java.Log;
 
